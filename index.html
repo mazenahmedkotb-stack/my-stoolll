@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MyTools - Free Utilities</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: #121212;
+      color: #fff;
+      text-align: center;
+      direction: rtl;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #1e1e1e;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    }
+    h1 {
+      font-size: 28px;
+      margin: 0;
+      color: #4da6ff;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    #shareBtn {
+      margin-top: 10px;
+      background: #4da6ff;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    #shareBtn:hover {
+      background: #3b8ee3;
+    }
+    .tool {
+      background: #1e1e1e;
+      margin: 20px auto;
+      padding: 20px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 550px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+    }
+    h2 {
+      color: #4da6ff;
+    }
+    textarea, input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 8px;
+      border: 1px solid #333;
+      background: #121212;
+      color: white;
+      resize: none;
+    }
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background: #4da6ff;
+      border: none;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #3b8ee3;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>MyTools</h1>
+    <button id="shareBtn">🔗 Share</button>
+  </header>
+
+  <!-- أداة 1: عدّ الكلمات والحروف -->
+  <div class="tool">
+    <h2>🧮 عدّ الكلمات والحروف</h2>
+    <textarea id="textCount" rows="5" placeholder="اكتب النص هنا..."></textarea>
+    <button onclick="countText()">احسب</button>
+    <p id="wordResult"></p>
+    <p id="charResult"></p>
+  </div>
+
+  <!-- أداة 2: تحويل الحروف -->
+  <div class="tool">
+    <h2>🔠 تحويل الحروف</h2>
+    <textarea id="caseText" rows="5" placeholder="اكتب النص هنا..."></textarea><br>
+    <button onclick="toUpper()">أحرف كبيرة</button>
+    <button onclick="toLower()">أحرف صغيرة</button>
+  </div>
+
+  <!-- أداة 3: توليد رقم عشوائي -->
+  <div class="tool">
+    <h2>🔢 توليد رقم عشوائي</h2>
+    <label>من:</label>
+    <input type="number" id="minNum" value="1">
+    <label>إلى:</label>
+    <input type="number" id="maxNum" value="100">
+    <button onclick="generateNumber()">توليد</button>
+    <p id="randomResult"></p>
+  </div>
+
+  <!-- أداة 4: حساب وقت القراءة -->
+  <div class="tool">
+    <h2>🕐 حساب وقت القراءة</h2>
+    <textarea id="readText" rows="5" placeholder="اكتب النص هنا..."></textarea>
+    <button onclick="calcReadTime()">احسب الوقت</button>
+    <p id="readResult"></p>
+  </div>
+
+  <!-- أداة 5: عدّ الأسطر -->
+  <div class="tool">
+    <h2>🧾 عدّ الأسطر</h2>
+    <textarea id="lineText" rows="5" placeholder="اكتب النص هنا..."></textarea>
+    <button onclick="countLines()">احسب</button>
+    <p id="lineResult"></p>
+  </div>
+
+  <!-- أداة 6: عدّ الحروف مع المسافات -->
+  <div class="tool">
+    <h2>🔡 عدّ الحروف مع المسافات</h2>
+    <textarea id="charText" rows="5" placeholder="اكتب النص هنا..."></textarea>
+    <button onclick="countWithSpaces()">احسب</button>
+    <p id="charWithSpaces"></p>
+  </div>
+
+  <!-- أداة 7: عكس النص -->
+  <div class="tool">
+    <h2>🔁 عكس النص</h2>
+    <textarea id="reverseText" rows="5" placeholder="اكتب النص هنا..."></textarea>
+    <button onclick="reverseText()">اعكس</button>
+  </div>
+
+  <!-- أداة 8: تنظيف النص -->
+  <div class="tool">
+    <h2>🧹 تنظيف النص</h2>
+    <textarea id="cleanText" rows="5" placeholder="اكتب النص هنا..."></textarea>
+    <button onclick="cleanText()">نظّف</button>
+  </div>
+
+  <script>
+    // مشاركة الصفحة
+    document.getElementById("shareBtn").addEventListener("click", async () => {
+      const shareData = {
+        title: "MyTools",
+        text: "جرب موقع الأدوات المفيدة MyTools!",
+        url: window.location.href
+      };
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        alert("انسخ الرابط يدويًا: " + window.location.href);
+      }
+    });
+
+    // أداة 1
+    function countText() {
+      let text = document.getElementById("textCount").value.trim();
+      let words = text === "" ? 0 : text.split(/\s+/).length;
+      let chars = text.replace(/\s/g, '').length;
+      document.getElementById("wordResult").innerText = "عدد الكلمات: " + words;
+      document.getElementById("charResult").innerText = "عدد الحروف (بدون مسافات): " + chars;
+    }
+
+    // أداة 2
+    function toUpper() {
+      let text = document.getElementById("caseText");
+      text.value = text.value.toUpperCase();
+    }
+    function toLower() {
+      let text = document.getElementById("caseText");
+      text.value = text.value.toLowerCase();
+    }
+
+    // أداة 3
+    function generateNumber() {
+      let min = parseInt(document.getElementById("minNum").value);
+      let max = parseInt(document.getElementById("maxNum").value);
+      let random = Math.floor(Math.random() * (max - min + 1)) + min;
+      document.getElementById("randomResult").innerText = "الرقم العشوائي: " + random;
+    }
+
+    // أداة 4
+    function calcReadTime() {
+      let text = document.getElementById("readText").value.trim();
+      let words = text.split(/\s+/).length;
+      let minutes = (words / 200).toFixed(2);
+      document.getElementById("readResult").innerText = "⏱ وقت القراءة التقريبي: " + minutes + " دقيقة";
+    }
+
+    // أداة 5
+    function countLines() {
+      let text = document.getElementById("lineText").value;
+      let lines = text.split(/\n/).length;
+      document.getElementById("lineResult").innerText = "عدد الأسطر: " + lines;
+    }
+
+    // أداة 6
+    function countWithSpaces() {
+      let text = document.getElementById("charText").value;
+      let count = text.length;
+      document.getElementById("charWithSpaces").innerText = "عدد الحروف (بالمسافات): " + count;
+    }
+
+    // أداة 7
+    function reverseText() {
+      let text = document.getElementById("reverseText");
+      text.value = text.value.split("").reverse().join("");
+    }
+
+    // أداة 8
+    function cleanText() {
+      let text = document.getElementById("cleanText");
+      text.value = text.value.replace(/\s+/g, ' ').trim().replace(/[^\w\s\u0600-\u06FF]/g, '');
+    }
+  </script>
+
+</body>
+</html>
